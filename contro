@@ -1,0 +1,40 @@
+#include "SDL.h"
+#include "SDL_image.h"
+#include <stdio.h>
+
+#define MAX_BULLETS 1000
+
+typedef struct
+{
+  float x, y, dy;
+  short life;
+  char *name;
+  int currentSprite, walking, facingLeft, shooting, visible;
+  int alive;
+
+  SDL_Texture *sheetTexture;
+} Man;
+
+typedef struct
+{
+  float x, y, dx;
+} Bullet;
+
+SDL_Texture *bulletTexture;
+SDL_Texture *backgroundTexture;
+Bullet *bullets[MAX_BULLETS] = { NULL };
+Man enemy;
+
+int globalTime = 0;
+
+void addBullet(float x, float y, float dx)
+{
+  int found = -1;
+  for(int i = 0; i < MAX_BULLETS; i++)
+  {
+    if(bullets[i] == NULL)
+    {
+      found = i;
+      break;
+    }
+  }
