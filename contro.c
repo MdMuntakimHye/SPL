@@ -3,12 +3,17 @@
 #include <stdio.h>
 
 #define MAX_BULLETS 1000
+#define MAX_PARTICLES 10000
+#define GRAVITY 		  0.5f
 
 typedef struct
 {
   int x, y;
   short life;
   char *name;
+  int currentSprite, walking, facingLeft, shooting, visible;
+  int alive;
+  SDL_Texture* sheetTexture;
 } Man;
 
 typedef struct
@@ -20,6 +25,17 @@ typedef struct
 {
   int x, y, w, h;
 } Ledge;
+
+typedef struct
+{
+    float x, y, dx;
+} Bullet;
+
+typedef struct
+{
+    float x, y, dx, dy;
+    float life;
+} Particle;
 
 typedef struct
 {
@@ -36,6 +52,13 @@ typedef struct
   SDL_Texture *star;
   SDL_Texture *manFrames[2];
   SDL_Texture *brick;
+  SDL_Texture* bulletTexture;
+  SDL_Texture* backgroundTexture;
+  SDL_Texture* particleTexture;
+  Bullet* bullets[MAX_BULLETS] = { NULL };
+  Particle* particles[MAX_PARTICLES] = { NULL };
+  Man enemy;
+
 
   int time;
 
