@@ -321,6 +321,30 @@ int processEvents(SDL_Window *window, GameState *game)
   return done;
 }
 
+if(!man->walking)
+  {
+    if(state[SDL_SCANCODE_SPACE])// && !man->dy)
+    {
+      if(globalTime % 6 == 0)
+      {
+        if(man->currentSprite == 4)
+          man->currentSprite = 5;
+        else
+          man->currentSprite = 4;
+
+        if(!man->facingLeft)
+        {
+          addBullet(man->x+35, man->y+20, 3);
+        }
+        else
+        {
+          addBullet(man->x+5, man->y+20, -3);
+        }
+      }
+
+      man->shooting = 1;
+    }
+
 void doRender(SDL_Renderer *renderer, GameState *game)
 {
   //set the drawing color to blue
