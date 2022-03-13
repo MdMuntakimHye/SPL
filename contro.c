@@ -173,6 +173,61 @@ void process(GameState *game)
   man->dy += GRAVITY;
 }
 
+void updateLogic(Man* man)
+{
+    man->y += man->dy;
+    man->dy += GRAVITY;
+    if (man->y > 60)
+    {
+        man->y = 60;
+        man->dy = 0;
+    }
+
+    for (int i = 0; i < MAX_BULLETS; i++) if (bullets[i])
+    {
+        bullets[i]->x += bullets[i]->dx;
+
+        //simple coll. detection
+        if (bullets[i]->x > enemy.x && bullets[i]->x < enemy.x + 40 &&
+            bullets[i]->y > enemy.y && bullets[i]->y < enemy.y + 50)
+        {
+            if (enemy.alive)
+            {
+                enemy.alive = 0;
+
+                addParticles(bullets[i]->x, bullets[i]->y, 4.0, 100);
+            }
+        }
+
+        if (bullets[i]->x < -1000 || bullets[i]->x > 1000)
+            removeBullet(i);
+    }
+
+    if (enemy.alive == 0 && globalTime % 10 == 0)
+    {
+        addParticles(enemy.x, enemy.y, 4.0, 100);
+    }
+
+    if (enemy.alive == 0 && globalTime % 6 == 0)
+    {
+        if (enemy.currentSprite < 6)
+            enemy.currentSprite = 6;
+        else if (enemy.currentSprite >= 6)
+        {
+            enemy.currentSprite++;
+            if (enemy.currentSprite > 7)
+            {
+                enemy.visible = 0;
+                enemy.currentSprite = 7;
+            }
+        }
+    }
+
+    processParticles();
+
+    globalTime++;
+}
+
 void collisionDetect(GameState *game)
 {
   //Check for collision with any ledges (brick blocks)
